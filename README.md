@@ -1,50 +1,37 @@
-# React + TypeScript + Vite
+# Wallet Balance
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Project retrieves balance of your ETH wallet via Tatum SDK.
 
-Currently, two official plugins are available:
+## Environment Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project uses environment variables for configuration. Create a `.env` file in the root directory of the project and add the following variable:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+VITE_TATUM_API_KEY=your_api_key_here
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Replace `your_api_key_here` with your actual Tatum API key.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Available Scripts
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+In the project directory, you can run:
+
+### `npm run dev`
+
+Runs the app in development mode using Vite.
+
+### `npm run build`
+
+Builds the app for production. This script runs TypeScript compilation (`tsc -b`) and then builds the project with Vite.
+
+### `npm run lint`
+
+Lints the project files using ESLint.
+
+### `npm run prettier`
+
+Formats the project files using Prettier.
+
+### `npm run preview`
+
+Previews the built app locally.
