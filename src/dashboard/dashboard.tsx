@@ -6,10 +6,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useState, useMemo } from "react";
-import { getWalletBalance } from "./tatum-sdk";
 import { AddressBalance } from "@tatumio/tatum";
 import { BalanceSkeleton } from "./skeleton";
 import { Headline } from "./headline";
+import { useTatum } from "@/use-tatum";
 
 interface WalletState {
   wallet: string;
@@ -20,16 +20,20 @@ interface WalletState {
 
 export function Dashboard() {
   const [walletState, setWalletState] = useState<WalletState>({
-    wallet: '',
+    wallet: "",
     data: null,
     fetchError: null,
     isLoading: false,
   });
   const [inputError, setInputError] = useState<string | null>(null);
 
+  const { getWalletBalance } = useTatum();
+
   const ethBalance = useMemo(() => {
     if (!walletState.data) return null;
-    return walletState.data.find((asset) => asset.asset === "ETH")?.balance || "0";
+    return (
+      walletState.data.find((asset) => asset.asset === "ETH")?.balance || "0"
+    );
   }, [walletState.data]);
 
   async function searchWalletByAddress() {
@@ -39,19 +43,20 @@ export function Dashboard() {
     }
     setInputError(null);
 
-    setWalletState(prev => ({ ...prev, isLoading: true, fetchError: null }));
+    setWalletState((prev) => ({ ...prev, isLoading: true, fetchError: null }));
 
     try {
       const response = await getWalletBalance(walletState.wallet);
-      setWalletState(prev => ({ ...prev, data: response.data }));
+      setWalletState((prev) => ({ ...prev, data: response.data }));
     } catch (err) {
-      setWalletState(prev => ({
+      setWalletState((prev) => ({
         ...prev,
-        fetchError: err instanceof Error ? err.message : "An unknown error occurred",
+        fetchError:
+          err instanceof Error ? err.message : "An unknown error occurred",
         data: null,
       }));
     } finally {
-      setWalletState(prev => ({ ...prev, isLoading: false }));
+      setWalletState((prev) => ({ ...prev, isLoading: false }));
     }
   }
 
@@ -59,7 +64,9 @@ export function Dashboard() {
     <div className="container mx-auto px-4 grid gap-4 py-16">
       <Headline
         searchValue={walletState.wallet}
-        setSearchValue={(value) => setWalletState(prev => ({ ...prev, wallet: value }))}
+        setSearchValue={(value) =>
+          setWalletState((prev) => ({ ...prev, wallet: value }))
+        }
         handleSearch={searchWalletByAddress}
         inputError={inputError}
       />
@@ -70,10 +77,10 @@ export function Dashboard() {
         </CardHeader>
         <CardContent>
           {walletState.isLoading && <BalanceSkeleton />}
-          {walletState.fetchError && <p className="text-red-500">{walletState.fetchError}</p>}
-          {ethBalance && (
-             <p>ETH Balance: {ethBalance}</p>
+          {walletState.fetchError && (
+            <p className="text-red-500">{walletState.fetchError}</p>
           )}
+          {ethBalance && <p>ETH Balance: {ethBalance}</p>}
         </CardContent>
       </Card>
     </div>
